@@ -1,41 +1,43 @@
-import jwt from 'jsonwebtoken';
-import { connectDB } from '../../middlewares/connectDB';
-import type { NextApiRequest, NextApiResponse } from "next";
-import { UserModel } from '../../models/UserModel';
+import type {NextApiRequest, NextApiResponse} from 'next';
 import md5 from 'md5';
+import jwt from 'jsonwebtoken';
+import connectDB from '../../middlewares/connectDB';
+import {UserModel} from '../../models/UserModel';
+import {DefaultResponseMsg} from '../../types/DefaultResponseMsg';
+import { Login } from '../../types/Login';
+import { LoginResponse } from '../../types/LoginResponse';
 
-type LoginRequest = {
-    email: string,
-    password: string
-}
-
-const login = async (req: NextApiRequest, res :NextApiResponse) => {
-    try {
-        if (req.method !== 'POST') {
-            return res.status(405).json({error: 'Método HTTP não suportado'})
-        }
-        const {body} = req
-        const data = body as LoginRequest
-
-        if (!data.email || !data.password) {
-            return res.status(400).json({error: 'Preencha todos os campos'})
+ const handler = async (req : NextApiRequest, res : NextApiResponse<DefaultResponseMsg | LoginResponse>) => {
+    try{
+        if(req.method !== 'POST'){
+            res.status(400).json({ error: 'Metodo solicitado nao existe '});
+            return;
         }
 
-        const users = await UserModel.find({email: data.email, password: md5(data.password)})
-        if (users && users.length > 0) {
-            const {JWT_SECRET} = process.env
-            if (!JWT_SECRET) {
-                console.log("JWT secret não selecionado")
-                return res.status(500).json({error: 'Erro no servidor'})
+        const {MY_SECRET_KEY} = process.env;
+        if(!MY_SECRET_KEY){
+            res.status(500).json({ error: 'ENV my secret key nao encontrada '});
+            return;
+        }
+
+        if(req.body){
+            const auth = req.body as Login;
+            if(auth.login && auth.password){
+                const usersFound = await UserModel.find({email : auth.login, password: md5(auth.password)});
+                if(usersFound && usersFound.length > 0){
+                    const user = usersFound[0];
+                    const token = jwt.sign({_id : user._id}, MY_SECRET_KEY);
+                    res.status(200).json({ token, name: user.name, email: user.email});
+                    return;
+                }
             }
-            const token = jwt.sign({_id: users[0]._id}, JWT_SECRET)
-            return res.status(200).json({token: token})
         }
 
-        return res.status(400).json({error: 'Usuário inválido'})
-    } catch (e : any) {
-        console.log('Erro no cadastro:', e)
+        res.status(400).json({ error: 'Usuario ou senha invalidos '});
+    }catch(e){
+        console.log('Ocorreu erro ao autenticar usuario: ', e);
+        res.status(500).json({ error: 'Ocorreu erro ao autenticar usuario, tente novamente '});
     }
 }
 
-export default connectDB(login)
+export default connectDB(handler);
