@@ -5,14 +5,14 @@
     font-family: 'Biennale Regular';
     font-style: normal;
     font-weight: normal;
-    src: url(../public/fonts/BiennaleRegular.otf) format('opentype');
+    src: url('../public/fonts/BiennaleRegular.otf') format('opentype');
 }
 
-html {
+html{
     height: 100%;
 }
 
-body {
+body{
     height: 100%;
     font-family: 'Biennale Regular';
 }
@@ -30,3 +30,4 @@ body {
 }
 
 @import './login.scss';
+@import './header.scss';
