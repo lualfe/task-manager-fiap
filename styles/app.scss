@@ -29,13 +29,6 @@ body{
     padding: 0px;
 }
 
-@import './login.scss';
-@import './header.scss';
-@import './footer.scss';
-@import './list.scss';
-@import './item.scss';
-@import './filter.scss';
-
 input, select {
     font-style: normal;
     font-weight: normal;
@@ -85,7 +78,15 @@ input, select {
         outline: none;
     }
 
-    select {
-        max-width: 110px;
+    select{
+        min-width: 110px;
     }
 }
+
+@import './login.scss';
+@import './header.scss';
+@import './footer.scss';
+@import './list.scss';
+@import './item.scss';
+@import './filter.scss';
+@import './modal.scss';

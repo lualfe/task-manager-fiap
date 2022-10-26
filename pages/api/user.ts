@@ -25,8 +25,9 @@ const handler = async(req : NextApiRequest, res : NextApiResponse<DefaultRespons
                 return;
             }
 
-            if(user.password && user.password.length < 6){
-                res.status(400).json({ error: 'Senha do usuario precisa ter ao menos 6 caracteres'});
+            var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+            if(!strongRegex.test(user.password)){
+                res.status(400).json({ error: 'Senha do usuario invalida'});
                 return;
             }
 
