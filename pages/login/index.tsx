@@ -1,21 +1,21 @@
 import type { NextPage } from "next";
-import { useRouter } from "next/router";
+import { Login } from "../../containers/Login";
 import { useEffect } from "react";
-import { Principal } from "../containers/Principal";
+import { useRouter } from "next/router";
 
-const Home: NextPage = () => {
+const LoginPage: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("accessToken");
-      if (!token) {
-        router.push("/login");
+      if (token) {
+        router.push("/");
       }
     }
   }, [router]);
 
-  return <Principal />;
+  return <Login />;
 };
 
-export default Home;
+export default LoginPage;

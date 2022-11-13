@@ -1,21 +1,21 @@
 import type { NextPage } from "next";
-import { useRouter } from "next/router";
+import { Register } from "../../containers/Register";
 import { useEffect } from "react";
-import { Principal } from "../containers/Principal";
+import { useRouter } from "next/router";
 
-const Home: NextPage = () => {
+const RegisterPage: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("accessToken");
-      if (!token) {
-        router.push("/login");
+      if (token) {
+        router.push("/");
       }
     }
   }, [router]);
 
-  return <Principal />;
+  return <Register />;
 };
 
-export default Home;
+export default RegisterPage;

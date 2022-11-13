@@ -43,7 +43,7 @@ const handler = async(req : NextApiRequest, res : NextApiResponse<DefaultRespons
             }
 
             await UserModel.create(final);
-            res.status(200).json({msg: 'Usuario adicionado com sucesso'});
+            res.status(201).json({msg: 'Usuario adicionado com sucesso'});
             return;
         }
 

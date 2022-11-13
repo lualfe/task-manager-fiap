@@ -10,7 +10,6 @@ import moment from 'moment';
 
 const handler = async(req:NextApiRequest, res:NextApiResponse<DefaultResponseMsg | Task[]>) =>{
     try{
-
         const userId = req?.body?.userId ? req?.body?.userId : req?.query?.userId as string;
         const failedValidation = await validateUser(userId);
         if(failedValidation){

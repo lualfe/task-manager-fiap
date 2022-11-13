@@ -71,6 +71,20 @@
             font-size: 16px;
             margin-top: 30px;
         }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            width: 100%;
+            text-align: center;
+            color: $primaryColor;
+            transition: ease .5s;
+
+            &:hover {
+                text-decoration: none;
+                color: $secondaryColor;
+            }
+        }
     }
 
     @media screen and (min-width: $mediaQueryDesktop) {
